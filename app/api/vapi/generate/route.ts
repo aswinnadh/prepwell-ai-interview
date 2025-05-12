@@ -2,8 +2,10 @@ import { generateText } from "ai";
 import { google } from "@ai-sdk/google";
 import { db } from "@/firebase/admin";
 
+
 export async function GET() {
   return Response.json({ success: true, data: "THANK YOU!" }, { status: 200 });
+  console.log("GET request received");
 }
 
 export async function POST(request: Request) {
