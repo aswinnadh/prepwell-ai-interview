@@ -3,22 +3,22 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
 import InterviewCard from "@/components/InterviewCard";
+import { getCurrentUser } from "@/lib/actions/auth.action";
 import {
-  getCurrentUser,
   getInterviewsByUserId,
   getLatestInterviews,
-} from "@/lib/actions/auth.action";
+} from "@/lib/actions/general.action";
 
 const page = async () => {
   const user = await getCurrentUser();
 
-  const [userInterviews,latestInterviews]=await Promise.all([
+  const [userInterviews, latestInterviews] = await Promise.all([
     user?.id ? await getInterviewsByUserId(user.id) : [],
     user?.id ? await getLatestInterviews({ userId: user.id }) : [],
   ]);
 
   const hasPastInterviews = (userInterviews ?? []).length > 0;
-  const hasUpcomingInterviews = latestInterviews ?? [] ?.length > 0;
+  const hasUpcomingInterviews = latestInterviews ?? []?.length > 0;
 
   return (
     <>
