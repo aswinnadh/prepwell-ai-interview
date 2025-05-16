@@ -26,7 +26,7 @@ export async function POST(request: Request) {
         ["Question 1", "Question 2", "Question 3"]
         
         Thank you! <3
-    `,
+    `
     });
 
     const interview = {

@@ -1,22 +1,28 @@
-import React from "react";
 import dayjs from "dayjs";
-import Image from "next/image";
-import { cn, getRandomInterviewCover } from "@/lib/utils";
-import { Button } from "./ui/button";
 import Link from "next/link";
+import Image from "next/image";
+
+import { Button } from "./ui/button";
 import DisplayTechIcons from "./DisplayTechIcons";
 
-const InterviewCard = ({
+import { cn, getRandomInterviewCover } from "@/lib/utils";
+import { getFeedbackByInterviewId } from "@/lib/actions/general.action";
+
+const InterviewCard = async ({
   id,
-  // userId,
+  userId,
   role,
   type,
   techstack,
   createdAt,
 }: InterviewCardProps) => {
-  const feedback = null as Feedback | null;
-
-  
+  const feedback =
+    userId && id
+      ? await getFeedbackByInterviewId({
+          interviewId: id,
+          userId,
+        })
+      : null;
 
   const normalizedType = /mix/gi.test(type) ? "Mixed" : type;
 
@@ -30,20 +36,25 @@ const InterviewCard = ({
   const formattedDate = dayjs(
     feedback?.createdAt || createdAt || Date.now()
   ).format("MMM D, YYYY");
+
   return (
     <div className="card-border w-[360px] max-sm:w-full min-h-96">
       <div className="card-interview">
         <div>
-          <div className={cn(
+          {/* Type Badge */}
+          <div
+            className={cn(
               "absolute top-0 right-0 w-fit px-4 py-2 rounded-bl-lg",
               badgeColor
-            )}>
-            <p className="badge-text">{normalizedType}</p>
+            )}
+          >
+            <p className="badge-text ">{normalizedType}</p>
           </div>
+
           {/* Cover Image */}
           <Image
             src={getRandomInterviewCover()}
-            alt="cover image"
+            alt="cover-image"
             width={90}
             height={90}
             className="rounded-full object-fit size-[90px]"
@@ -57,23 +68,26 @@ const InterviewCard = ({
             <div className="flex flex-row gap-2">
               <Image
                 src="/calendar.svg"
-                alt="calender"
                 width={22}
                 height={22}
+                alt="calendar"
               />
               <p>{formattedDate}</p>
             </div>
+
             <div className="flex flex-row gap-2 items-center">
-              <Image src="/star.svg" alt="star" width={22} height={22} />
+              <Image src="/star.svg" width={22} height={22} alt="star" />
               <p>{feedback?.totalScore || "---"}/100</p>
             </div>
           </div>
+
           {/* Feedback or Placeholder Text */}
-          <p className="line-clamp mt-5">
+          <p className="line-clamp-2 mt-5">
             {feedback?.finalAssessment ||
-              "You haven't taken the interview yet. Take it to improve your skills"}
+              "You haven't taken this interview yet. Take it now to improve your skills."}
           </p>
         </div>
+
         <div className="flex flex-row justify-between">
           <DisplayTechIcons techStack={techstack} />
 
@@ -89,7 +103,6 @@ const InterviewCard = ({
             </Link>
           </Button>
         </div>
-
       </div>
     </div>
   );
