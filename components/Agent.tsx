@@ -119,6 +119,8 @@ const Agent = ({
 
     if (type === "generate") {
       await vapi.start(process.env.NEXT_PUBLIC_VAPI_WORKFLOW_ID!, {
+        clientMessages: [],
+        serverMessages: [],
         variableValues: {
           username: userName,
           userid: userId,
@@ -133,6 +135,8 @@ const Agent = ({
       }
 
       await vapi.start(interviewer, {
+        clientMessages: [],
+        serverMessages: [],
         variableValues: {
           questions: formattedQuestions,
         },
@@ -167,7 +171,7 @@ const Agent = ({
         <div className="card-border">
           <div className="card-content">
             <Image
-              src="/user-avatar.png"
+              src="/profile.svg"
               alt="profile-image"
               width={539}
               height={539}
